@@ -17,10 +17,12 @@ world = World()
 running = True
 while running:
     for event in pygame.event.get():
+        world.update(event)
         if event.type == pygame.QUIT:
             running = False
 
-    pressed_keys = pygame.key.get_pressed()
+    # pressed_keys = pygame.key.get_pressed()
+    # print(events)
 
     # tile.update(pressed_keys)
     screen.fill((0, 0, 0))

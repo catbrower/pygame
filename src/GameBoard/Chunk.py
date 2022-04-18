@@ -4,35 +4,25 @@ import pygame
 from GameBoard.Tile import Tile
 import Constants
 
-from pygame.locals import (
-    RLEACCEL,
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
-    KEYDOWN,
-    QUIT,
-)
-
 class Chunk():
     size = Constants.CHUNK_SIZE
-    DEBUG = True
+    DEBUG = False
 
     def __init__(self, chunk_x, chunk_y):
         self.chunk_x = chunk_x
         self.chunk_y = chunk_y
-        self.tiles = np.array([Tile.build('grass') for n in range(Chunk.size ** 2)]).reshape((Chunk.size, Chunk.size))
+
+        self.tiles = np.array([Tile.build(np.random.choice(['grass', 'dirt'])) for n in range(Chunk.size ** 2)]).reshape((Chunk.size, Chunk.size))
 
     # interpret offset as how many chunks x & y away from player chunk
     def render(self, screen, player, offset):
-        relative_player_x = player['x'] % Chunk.size
-        relative_player_y = player['y'] % Chunk.size
+        relative_player_x = abs(player['x']) % Chunk.size
+        relative_player_y = abs(player['y']) % Chunk.size
 
         # Calculate tile offset used for rendering tiles
         # these values should be zero for the tile the player is in
-        tile_offset_x = offset['x'] * Chunk.size - relative_player_x
-        tile_offset_y = offset['y'] * Chunk.size - relative_player_y
+        tile_offset_x = offset['x'] * Chunk.size - player['x']
+        tile_offset_y = offset['y'] * Chunk.size - player['y']
 
         index = range(Chunk.size)
         for i in index:
